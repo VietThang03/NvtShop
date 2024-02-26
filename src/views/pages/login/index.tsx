@@ -24,6 +24,7 @@ import Image from 'next/image'
 import GoogleSvg from '/public/svgs/google.svg'
 import FacebookSvg from '/public/svgs/facebook.svg'
 import Link from 'next/link'
+import { useAuth } from 'src/hooks/useAuth'
 
 type TProps = {}
 const loginSchema = schema.pick(['email', 'password'])
@@ -32,6 +33,7 @@ type FormData = Pick<Schema, 'email' | 'password'>
 const LoginPage: NextPage<TProps> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [isRemember, setIsRemember] = useState<boolean>(true)
+  const { login } = useAuth()
   const theme = useTheme()
   const {
     handleSubmit,
@@ -46,8 +48,10 @@ const LoginPage: NextPage<TProps> = () => {
     },
     resolver: yupResolver(loginSchema)
   })
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  const onSubmit = handleSubmit((data: { email: string; password: string }) => {
+    if(!Object.keys(errors)?.length){
+      login({ ...data, rememberMe: isRemember })
+    }
   })
   return (
     <Box
@@ -101,9 +105,13 @@ const LoginPage: NextPage<TProps> = () => {
             alignItems: 'center'
           }}
         >
-          <Typography component='h1' variant='h5' sx={{
-            color: theme.palette.mode === 'light' ? theme.palette.common.black :  theme.palette.common.white
-          }}>
+          <Typography
+            component='h1'
+            variant='h5'
+            sx={{
+              color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+            }}
+          >
             Sign in
           </Typography>
           <form autoComplete='off' onSubmit={onSubmit} noValidate>
@@ -216,10 +224,13 @@ const LoginPage: NextPage<TProps> = () => {
                   }
                   label='Remember me'
                 />
-                <Link href='#' style={{
+                <Link
+                  href='#'
+                  style={{
                     textDecoration: 'none',
-                    color: theme.palette.mode === 'light' ? theme.palette.common.black :  theme.palette.common.white
-                }}>
+                    color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+                  }}
+                >
                   Forgot password?
                 </Link>
               </Box>
@@ -238,10 +249,13 @@ const LoginPage: NextPage<TProps> = () => {
               >
                 <Grid item>{"Don't have an account?"}</Grid>
                 <Grid item>
-                  <Link href='/register' style={{
-                    textDecoration: 'none',
-                    color: theme.palette.mode === 'light' ? theme.palette.common.black :  theme.palette.common.white
-                }}>
+                  <Link
+                    href='/register'
+                    style={{
+                      textDecoration: 'none',
+                      color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+                    }}
+                  >
                     Sign up
                   </Link>
                 </Grid>
