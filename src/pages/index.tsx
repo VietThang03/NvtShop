@@ -1,7 +1,9 @@
 'use client'
 import { Box } from '@mui/material'
 import Head from 'next/head'
+import { ReactNode } from 'react'
 import CustomTextField from 'src/components/text-field'
+import LayoutNoApp from 'src/views/layouts/LayoutNoApp'
 
 export default function Home() {
   return (
@@ -16,3 +18,5 @@ export default function Home() {
     </>
   )
 }
+
+Home.getLayout = (page: ReactNode) => <LayoutNoApp>{page}</LayoutNoApp>
