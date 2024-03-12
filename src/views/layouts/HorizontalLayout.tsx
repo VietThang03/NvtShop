@@ -8,6 +8,7 @@ import Badge from '@mui/material/Badge'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import MenuIcon from '@mui/icons-material/Menu'
 import { NextPage } from 'next'
+import UserDropdown from 'src/components/user-dropdown'
 
 type TProps = {
   open: boolean
@@ -69,11 +70,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
-        <IconButton color='inherit'>
-          <Badge badgeContent={4} color='primary'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+        <UserDropdown/>
       </Toolbar>
     </AppBar>
   )

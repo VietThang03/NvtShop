@@ -82,8 +82,10 @@ export default function App(props: ExtendedAppProps) {
 
   const setConfig = Component.setConfig ?? undefined
 
+  //user dang nhap r moi dc vao
   const authGuard = Component.authGuard ?? true
 
+  //user chua dang nhap dc phep truy cap
   const guestGuard = Component.guestGuard ?? false
 
   const aclAbilities = Component.acl ?? defaultACLObj

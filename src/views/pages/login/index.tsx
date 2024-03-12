@@ -43,8 +43,8 @@ const LoginPage: NextPage<TProps> = () => {
     control
   } = useForm<FormData>({
     defaultValues: {
-      email: '',
-      password: ''
+      email: 'admin@gmail.com',
+      password: '123456@Admin'
     },
     resolver: yupResolver(loginSchema)
   })
