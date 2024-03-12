@@ -15,6 +15,7 @@ import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './ty
 import { loginAuth, logoutAuth } from 'src/services/auth'
 import { CONFIG_API } from 'src/configs/api'
 import { removeLocalUserData, setLocalUserData } from 'src/helpers/storage'
+import instanceAxios from 'src/helpers/axios'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -45,12 +46,8 @@ const AuthProvider = ({ children }: Props) => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
-        await axios
-          .get(CONFIG_API.AUTH.AUTHME, {
-            headers: {
-              Authorization: `Bearer ${storedToken}`
-            }
-          })
+        await instanceAxios
+          .get(CONFIG_API.AUTH.AUTHME)
           .then(async response => {
             setLoading(false)
             setUser({ ...response.data.data })
@@ -76,7 +73,7 @@ const AuthProvider = ({ children }: Props) => {
     loginAuth({ email: params.email, password: params.password })
       .then(async response => {
         params.rememberMe
-          ? setLocalUserData(JSON.stringify(response.data.user), response.data.access_token, response.data.refreshtoken)
+          ? setLocalUserData(JSON.stringify(response.data.user), response.data.access_token, response.data.refresh_token)
           : null
         const returnUrl = router.query.returnUrl
 
