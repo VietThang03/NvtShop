@@ -16,11 +16,16 @@ import Logout from '@mui/icons-material/Logout'
 import IconifyIcon from '../../../../components/Icon'
 import { useAuth } from 'src/hooks/useAuth'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+import { ROUTE_CONFIG } from 'src/configs/route'
 
 type TProps = {}
 
 const UserDropdown = (props: TProps) => {
   const { user, logout } = useAuth()
+  const router = useRouter()
+  const {t} = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -28,6 +33,11 @@ const UserDropdown = (props: TProps) => {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleNavigateMyProfile = () => {
+    router.push(`/${ROUTE_CONFIG.MY_PROFILE}`)
+    handleClose()
   }
   return (
     <React.Fragment>
@@ -100,25 +110,10 @@ const UserDropdown = (props: TProps) => {
           {/* {user?.firstName} {user?.middleName} {user?.lastName} */}
           {user?.email}
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+        <MenuItem onClick={handleNavigateMyProfile}>
+          <Avatar />{t("my_profile")}
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize='small' />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize='small' />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize='small' />
