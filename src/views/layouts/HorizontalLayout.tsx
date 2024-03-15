@@ -11,6 +11,10 @@ import { NextPage } from 'next'
 import UserDropdown from 'src/views/layouts/components/user-dropdown'
 import { ModeToggle } from './components/mode-toggle'
 import { LanguageDropdown } from './components/language-dropdown'
+import { useAuth } from 'src/hooks/useAuth'
+import { Button } from '@mui/material'
+import { useRouter } from 'next/router'
+import { ROUTE_CONFIG } from 'src/configs/route'
 
 type TProps = {
   open: boolean
@@ -46,6 +50,12 @@ const AppBar = styled(MuiAppBar, {
 }))
 
 const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) => {
+  const { user } = useAuth()
+  const router = useRouter()
+
+  const handleNavigateLogin = () => {
+    router.push(`/${ROUTE_CONFIG.LOGIN}`)
+  }
   return (
     <AppBar position='absolute' open={open}>
       <Toolbar
@@ -71,9 +81,22 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
-        <LanguageDropdown/>
-        <ModeToggle/>
-        <UserDropdown/>
+        <LanguageDropdown />
+        <ModeToggle />
+        {user ? (
+          <UserDropdown />
+        ) : (
+          <Button
+            variant='contained'
+            sx={{
+              ml: 3,
+              width: 'auto'
+            }}
+            onClick={handleNavigateLogin}
+          >
+            Sign In
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   )
