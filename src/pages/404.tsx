@@ -7,9 +7,15 @@ import BlankLayout from 'src/views/layouts/BlankLayout'
 
 const Error404 = () => {
   return (
-    <Box className='content-center'>
+    <Box className='content-center' sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100vh'
+    }}>
       <Typography variant='h2' sx={{ mb: 1.5 }}>
-        Page Not Found
+        Page Not Found😓
       </Typography>
     </Box>
   )

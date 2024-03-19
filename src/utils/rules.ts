@@ -24,7 +24,7 @@ export const schema = yup
     city: yup
       .string(),
     phoneNumber: yup
-      .string(),
+      .string().min(8, "Số điện thoại phải trên 8 chữ số"),
     role: yup
       .string()
       .required('Nhập role là bắt buộc'),

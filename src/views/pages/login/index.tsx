@@ -25,6 +25,7 @@ import GoogleSvg from '/public/svgs/google.svg'
 import FacebookSvg from '/public/svgs/facebook.svg'
 import Link from 'next/link'
 import { useAuth } from 'src/hooks/useAuth'
+import toast from 'react-hot-toast'
 
 type TProps = {}
 const loginSchema = schema.pick(['email', 'password'])
@@ -50,7 +51,12 @@ const LoginPage: NextPage<TProps> = () => {
   })
   const onSubmit = handleSubmit((data: { email: string; password: string }) => {
     if(!Object.keys(errors)?.length){
-      login({ ...data, rememberMe: isRemember })
+      login({ ...data, rememberMe: isRemember }, (err) => {
+        if(err?.response?.data?.typeError === "INVALID"){
+          toast.error('The email or password is wrong')
+        }
+        // setError('email', {type: 'invalid', message: 'The email or password is wrong'})
+      })
     }
   })
   return (
