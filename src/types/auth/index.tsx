@@ -11,10 +11,18 @@ export type RegisterAuth = {
 }
 
 export type UpdateAuth = {
-    email: string,
-    role: string;
-    address?: string,
-    city?: string,
-    phoneNumber?: string,
-    fullName: string
+    email: string
+    role: string
+    address?: string
+    city?: string
+    phoneNumber?: string
+    firstName: string
+    lastName: string
+    middleName: string
+    avatar?: string
+}
+
+export type ChangePassword = {
+    currentPassword: string
+    newPassword: string
 }

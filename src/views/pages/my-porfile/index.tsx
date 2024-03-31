@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { Avatar, Box, Button, Card, Grid, IconButton, Typography, useTheme } from '@mui/material'
+import { Avatar, Box, Button, Card, Grid, IconButton, InputLabel, Typography, useTheme } from '@mui/material'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import IconifyIcon from 'src/components/Icon'
+import CustomSelect from 'src/components/custom-select'
 import FallbackSpinner from 'src/components/fall-back'
 import ModalSpinner from 'src/components/spinner'
 import CustomTextField from 'src/components/text-field'
@@ -16,6 +17,7 @@ import WrapperFileUpload from 'src/components/wrap-file-upload'
 import { UserDataType } from 'src/contexts/types'
 import { getAuthMe } from 'src/services/auth'
 import { AppDispatch, RootState } from 'src/stores'
+import { resetInitialState } from 'src/stores/apps/auth'
 import { updateAuthMe } from 'src/stores/apps/auth/actions'
 import { convertBase64, separattionFullName, toFullName } from 'src/utils'
 import { Schema, schema } from 'src/utils/rules'
@@ -76,7 +78,7 @@ const MyProfilePage = () => {
       })
   }
   const onSubmit = handleSubmit(data => {
-    const {firstName, lastName, middleName} = separattionFullName(data.fullName, i18n.language)
+    const { firstName, lastName, middleName } = separattionFullName(data.fullName, i18n.language)
     dispatch(
       updateAuthMe({
         email: data.email,
@@ -104,6 +106,7 @@ const MyProfilePage = () => {
         toast.error(messageUpdateMe)
       } else if (isSuccessUpdateMe) {
         toast.success(messageUpdateMe)
+        dispatch(resetInitialState())
         fetchGetAuthMe()
       }
     }
@@ -223,6 +226,9 @@ const MyProfilePage = () => {
                       onBlur={onBlur}
                       // error={Boolean(errors?.email)}
                       placeholder='Enter your email...'
+                      sx={{
+                        borderRadius: '4px'
+                      }}
                     />
                   )}
                   name='email'
@@ -247,22 +253,36 @@ const MyProfilePage = () => {
                     required: true
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      disabled
-                      id='role'
-                      label='Role'
-                      name='role'
-                      autoComplete='role'
-                      autoFocus
-                      value={value}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      // error={Boolean(errors?.email)}
-                      placeholder='Input role...'
-                    />
+                    <Box
+                      sx={{
+                       display: 'flex',
+                       flexDirection: 'column',
+                       gap: '8px',
+                       marginTop: '14px'
+                      }}
+                    >
+                      <InputLabel
+                        sx={{
+                          fontSize: '13px',                        
+                          color: `rgba(${theme.palette.customColors.main}, 0.42)`
+                        }}
+                      >
+                        Role *{' '}
+                      </InputLabel>
+                      <CustomSelect
+                        fullWidth
+                        // disabled
+                        placeholder='Enter your role...'
+                        onChange={onChange}
+                        value={value}
+                        options={[]}
+                        onBlur={onBlur}
+                        autoFocus
+                        sx={{
+                          borderRadius: '4px'
+                        }}
+                      />
+                    </Box>
                   )}
                   name='role'
                 />
@@ -321,21 +341,36 @@ const MyProfilePage = () => {
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
+                    <Box
+                    sx={{
+                     display: 'flex',
+                     flexDirection: 'column',
+                     gap: '8px',
+                     marginTop: '14px'
+                    }}
+                  >
+                    <InputLabel
+                      sx={{
+                        fontSize: '13px',
+                        color: `rgba(${theme.palette.customColors.main}, 0.42)`
+                      }}
+                    >
+                      City *{' '}
+                    </InputLabel>
+                    <CustomSelect
                       fullWidth
-                      id='city'
-                      label='City'
-                      name='city'
-                      autoComplete='city'
-                      autoFocus
-                      value={value}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      // error={Boolean(errors?.email)}
+                      // disabled
                       placeholder='Enter your city...'
+                      onChange={onChange}
+                      value={value}
+                      options={[]}
+                      onBlur={onBlur}
+                      autoFocus
+                      sx={{
+                        borderRadius: '4px'
+                      }}
                     />
+                  </Box>
                   )}
                   name='city'
                 />

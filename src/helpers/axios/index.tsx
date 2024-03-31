@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { BASE_URL, CONFIG_API } from 'src/configs/api'
-import { getLocalUserData, removeLocalUserData } from '../storage'
+import { getLocalUserData, getTemporaryToken, removeLocalUserData, removeTemporaryToken, setLocalUserData, setTemporaryToken } from '../storage'
 import { jwtDecode } from 'jwt-decode'
 import { FC } from 'react'
 import { NextRouter, useRouter } from 'next/router'
@@ -24,20 +24,28 @@ const handleRedirectLogin = (router: NextRouter, setUser: (data: UserDataType | 
   }
   setUser(null)
   removeLocalUserData()
+  removeTemporaryToken()
 }
 
 export  const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
   const router = useRouter()
-  const {setUser} = useAuth()
+  const {setUser, user} = useAuth()
   instanceAxios.interceptors.request.use(async config => {
     //gui request len api ==> di qua config
     //config chua headers ==> gui access_token len config de ko p cau hinh gui access_token cho moi request
     const { refreshToken, accessToken } = getLocalUserData()
-    if (accessToken) {
-      const decodedAccessToken = jwtDecode(accessToken)
+    const {temporaryToken} = getTemporaryToken()
+    if (accessToken || temporaryToken) {
+      let decodedAccessToken: any = {}
+      if(accessToken){
+         decodedAccessToken = jwtDecode(accessToken)
+      } else if(temporaryToken){
+        decodedAccessToken = jwtDecode(temporaryToken)
+      }
+      
       //check xem access token con han khong
       if (decodedAccessToken.exp! > Date.now() / 1000) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`
+        config.headers['Authorization'] = `Bearer ${accessToken ? accessToken : temporaryToken}`
       } else {
         // neu access token het han ==> call api refresh toekn de lay access token moi cho vao headers
         if (refreshToken) {
@@ -51,7 +59,12 @@ export  const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
             }).then((res) => {
                 const newAccessToken = res?.data?.data?.access_token
                 if(newAccessToken){
+                   // gan access token moi len Authorization (headers)
                     config.headers['Authorization'] = `Bearer ${newAccessToken}`
+                    //neu con accesstoken cu ==> set lai data moi
+                    if(accessToken){
+                      setLocalUserData(JSON.stringify(user), newAccessToken, refreshToken)
+                    }
                 }else{
                     handleRedirectLogin(router, setUser)
                 }
