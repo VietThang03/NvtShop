@@ -58,6 +58,8 @@ const UserDropdown = (props: TProps) => {
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const permissionsUser = user?.role.permissions ?? []
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -67,6 +69,16 @@ const UserDropdown = (props: TProps) => {
 
   const handleNavigateMyProfile = () => {
     router.push(`/${ROUTE_CONFIG.MY_PROFILE}`)
+    handleClose()
+  }
+
+  const handleNavigateChangePassword = () => {
+    router.push(`/${ROUTE_CONFIG.CHANGE_PASSWORD}`)
+    handleClose()
+  }
+
+  const handleNavigateManagerSystem = () => {
+    router.push(ROUTE_CONFIG.DASHBOARD)
     handleClose()
   }
   return (
@@ -195,12 +207,22 @@ const UserDropdown = (props: TProps) => {
           </Box>
         </Box>
         <Divider />
+        {permissionsUser.length > 0 && (
+          <MenuItem onClick={handleNavigateManagerSystem}>
+            <Avatar>
+              <IconifyIcon icon='material-symbols:manage-accounts-outline' />
+            </Avatar>
+            Manage System
+          </MenuItem>
+        )}
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar />
           {t('my_profile')}
         </MenuItem>
-        <MenuItem onClick={handleNavigateMyProfile}>
-         <IconifyIcon icon=""/>
+        <MenuItem onClick={handleNavigateChangePassword}>
+          <Avatar>
+            <IconifyIcon icon='material-symbols:lock-person-rounded' />
+          </Avatar>
           Change Password
         </MenuItem>
         <Divider />

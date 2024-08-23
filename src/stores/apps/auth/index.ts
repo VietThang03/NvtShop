@@ -1,7 +1,7 @@
 // ** Redux Imports
 import { Dispatch } from 'redux'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { register, updateAuthMe } from './actions'
+import { changePasswordMe, register, updateAuthMe } from './actions'
 
 const initialState = {
     isLoading: false,
@@ -12,6 +12,9 @@ const initialState = {
     isSuccessUpdateMe: true,
     isErrorUpdateMe: false,
     messageUpdateMe: '',
+    isSuccessChangePassword: true,
+    isErrorChangePassword: false,
+    messageChangePassword: '',
 }
 
 export const authSlice = createSlice({
@@ -25,9 +28,12 @@ export const authSlice = createSlice({
       state.isError = true
       state.message = ''
       state.typeError = ''
-      state.isErrorUpdateMe = true,
-      state.isSuccessUpdateMe = false,
+      state.isErrorUpdateMe = true
+      state.isSuccessUpdateMe = false
       state.messageUpdateMe = ''
+      state.isErrorChangePassword = true
+      state.isSuccessChangePassword = false
+      state.messageChangePassword = ''
     }
   },
   extraReducers: builder => {
@@ -65,6 +71,25 @@ export const authSlice = createSlice({
       state.isSuccessUpdateMe = false
       state.isErrorUpdateMe = true
       state.messageUpdateMe = ''
+      state.typeError = ''
+    })
+    
+    //update me
+    builder.addCase(changePasswordMe.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(changePasswordMe.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccessChangePassword = !!action.payload?.data // !! ==> chuyen ve dang true (boolean)
+      state.isErrorChangePassword = !action.payload?.data
+      state.messageChangePassword = action.payload?.message
+      state.typeError = action.payload?.typeError
+    })
+    builder.addCase(changePasswordMe.rejected, (state, action) => {
+      state.isLoading = false
+      state.isSuccessChangePassword = false
+      state.isErrorChangePassword = true
+      state.messageChangePassword = ''
       state.typeError = ''
     })
   }

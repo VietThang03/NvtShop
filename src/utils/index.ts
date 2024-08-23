@@ -47,3 +47,25 @@ export const separattionFullName = (fullName: string, language: string) => {
   }
   return result
 }
+
+
+export const getAllValueOfObject = (obj: any, arrExlude?: string[]) => {
+  try {
+    const values: any[] = []
+    for (const key in obj) {
+      //kiem tra xem neu obj truyen vao co them obj con ==> goi lai ham de lay gia tri cua obj con
+      if (typeof obj[key] === 'object') {
+        values.push(...getAllValueOfObject(obj[key], arrExlude))
+      } else {
+        //lay gia trị ko trung voi gia tri truyen vao tu arrExlude
+        if (!arrExlude?.includes(obj[key])) {
+          values.push(obj[key])
+        }
+      }
+    }
+
+    return values
+  } catch (error) {
+    return []
+  }
+}
