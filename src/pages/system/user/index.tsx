@@ -1,3 +1,5 @@
+import { PERMISSIONS } from "src/configs/permission"
+
 const UserPage = () => {
   return(
       <>
@@ -5,4 +7,5 @@ const UserPage = () => {
       </>
   )
 }
+UserPage.permissions = [PERMISSIONS.SYSTEM.USER.VIEW]
 export default UserPage

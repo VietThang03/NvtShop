@@ -2,14 +2,14 @@ import { Box, Button, Modal, ModalProps, Typography, styled } from '@mui/materia
 import React from 'react'
 
 interface TCustomModal extends ModalProps {
-  handleClose: () => void
+
 }
 
 const StyledModal = styled(Modal)<ModalProps>(({ theme }) => ({
   zIndex: 1300
 }))
 
-const CustomModal = ({ children, handleClose, open }: TCustomModal) => {
+const CustomModal = ({ children, onClose, open }: TCustomModal) => {
   // const [open, setOpen] = React.useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
@@ -17,7 +17,7 @@ const CustomModal = ({ children, handleClose, open }: TCustomModal) => {
     <>
       <StyledModal
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >

@@ -72,6 +72,8 @@ const ChangePasswordPage: NextPage<TProps> = () => {
     <>
       <Box
         sx={{
+          // height: '100vh',
+          // width: '100vw',
           backgroundColor: theme.palette.background.paper,
           display: 'flex',
           alignItems: 'center',
@@ -80,7 +82,6 @@ const ChangePasswordPage: NextPage<TProps> = () => {
       >
         <Box
           display={{
-            md: 'flex',
             xs: 'none',
             sm: ' flex'
           }}
@@ -97,7 +98,7 @@ const ChangePasswordPage: NextPage<TProps> = () => {
             src={theme.palette.mode === 'light' ? RegisterLight : RegisterDark}
             alt='Login image'
             style={{
-              height: '100%',
+              height: '32rem',
               width: 'auto'
             }}
           />
@@ -126,7 +127,7 @@ const ChangePasswordPage: NextPage<TProps> = () => {
                 color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
               }}
             >
-              Register
+              Change Password
             </Typography>
             <form autoComplete='off' onSubmit={onSubmit} noValidate>
               <Box sx={{ mt: 1 }}>
@@ -294,7 +295,7 @@ const ChangePasswordPage: NextPage<TProps> = () => {
                 ></Box>
 
                 <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                  Sign In
+                  Save
                 </Button>
               </Box>
             </form>

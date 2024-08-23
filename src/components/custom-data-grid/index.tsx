@@ -4,15 +4,20 @@ import { DataGrid, DataGridProps } from '@mui/x-data-grid'
 import { styled } from '@mui/material'
 
 const StyleCustomDataGrid = styled(DataGrid)<DataGridProps>(({theme}) => ({
-    "& .MuiDataGrid-main": {
-        border: `1px solid ${theme.palette.customColors.borderColor}`,
-        borderRadius: '8px'
+    "& .MuiDataGrid-withBorderColor": {
+        outline: "none !important"
+    },
+    ".MuiDataGrid-selectedRowCount":{
+      dispaly: "none"
+    },
+    ".MuiDataGrid-virtualScroller.css-qvtrhg-MuiDataGrid-virtualScroller":{
+      position: 'static'
     }
 }))
 
 const CustomDataGrid = React.forwardRef((props: DataGridProps, ref: React.Ref<any>) => {
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
+    <Box sx={{ height: 400, width: '100%', overflow: "auto" }}>
       <StyleCustomDataGrid
         {...props}
       />

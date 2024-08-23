@@ -4,5 +4,9 @@ export const CONFIG_API = {
     AUTH: {
         index: `${BASE_URL}/auth`,
         AUTHME: `${BASE_URL}/auth/me`
+    },
+    ROLE: {
+        index: `${BASE_URL}/roles`,
+        AUTHME: `${BASE_URL}/auth/me`
     }
 }

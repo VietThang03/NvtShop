@@ -92,6 +92,8 @@ export default function App(props: ExtendedAppProps) {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
+  const permissions = Component.permissions ?? []
+
   const toastOptions = {
     success: {
       className: 'react-hot-toast',
@@ -124,7 +126,7 @@ export default function App(props: ExtendedAppProps) {
                 return (
                   <ThemeComponent settings={settings}>
                     <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                      <AclGuard permissions={permissions} aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
                         {getLayout(<Component {...pageProps} />)}
                       </AclGuard>
                     </Guard>
