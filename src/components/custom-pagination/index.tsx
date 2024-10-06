@@ -10,8 +10,7 @@ type TProps = {
   onChangePagination: (page: number, pageSize: number) => void
 }
 
-const StylePagination = styled(Pagination)<PaginationProps>(({theme}) => ({
-}))
+const StylePagination = styled(Pagination)<PaginationProps>(({ theme }) => ({}))
 
 const CustomPagination = React.forwardRef((props: TProps, ref: Ref<any>) => {
   const { onChangePagination, page, pageSize, pageSizeOptions, rowLength, ...rests } = props
@@ -25,53 +24,63 @@ const CustomPagination = React.forwardRef((props: TProps, ref: Ref<any>) => {
         paddingLeft: '8px'
       }}
     >
-      <Box>
-        <span>Dang hien thi {" "}</span>
-        <span
-          style={{
-            fontWeight: 'bold'
-          }}
-        >
-          {page === 1 ? page : 1 + pageSize}
-          {' - '}
-        </span>
-        <span
-          style={{
-            fontWeight: 'bold'
-          }}
-        >
-          {page * pageSize} {" "}
-        </span>
-        <span>{" "} tren {" "}</span>
-        <span
-          style={{
-            fontWeight: 'bold'
-          }}
-        >
-          {rowLength}
-        </span>
-      </Box>
+      {rowLength > 0 ? (
+        <Box>
+          <span>Dang hien thi </span>
+          <span
+            style={{
+              fontWeight: 'bold'
+            }}
+          >
+            {page === 1 ? page : 1 + pageSize}
+            {' - '}
+          </span>
+          <span
+            style={{
+              fontWeight: 'bold'
+            }}
+          >
+            {page * pageSize}{' '}
+          </span>
+          <span> tren </span>
+          <span
+            style={{
+              fontWeight: 'bold'
+            }}
+          >
+            {rowLength}
+          </span>
+        </Box>
+      ) : (
+        <Box></Box>
+      )}
 
       <Box sx={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
           <span>So dong hien thi</span>
-          <Select sx={{
-            '& .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputSizeSmall': {
-                minWidth: "unset !important",
-                padding: '8.5px 12px 8.5px 24px !important',
-                marginRight: '20px'
-            }
-          }} size='small' value={pageSize} onChange={e => onChangePagination(1, +e.target.value)}>
+          <Select
+            sx={{
+              '& .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input.MuiInputBase-inputSizeSmall':
+                {
+                  minWidth: 'unset !important',
+                  padding: '8.5px 12px 8.5px 24px !important',
+                  marginRight: '20px'
+                }
+            }}
+            size='small'
+            value={pageSize}
+            onChange={e => onChangePagination(1, +e.target.value)}
+          >
             {pageSizeOptions.map(opt => {
-                return (
-                    <MenuItem key={opt} value={opt}>
-                        {opt}
-                    </MenuItem>
-                )
+              return (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              )
             })}
           </Select>
         </Box>
-        <StylePagination color='primary' {...rests}/>
+        <StylePagination color='primary' {...rests} />
       </Box>
     </Box>
   )

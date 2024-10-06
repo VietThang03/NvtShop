@@ -15,7 +15,7 @@ export const register = createAsyncThunk('auth/register', async (data: RegisterA
         TypeError: response?.response?.data?.typeError
    }  
 })
-
+ 
 export const updateAuthMe = createAsyncThunk('auth/update-me', async(data: UpdateAuth) => {
     const response = await updateAuth(data)
     if(response?.data){

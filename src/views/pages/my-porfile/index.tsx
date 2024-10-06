@@ -16,6 +16,8 @@ import CustomTextField from 'src/components/text-field'
 import WrapperFileUpload from 'src/components/wrap-file-upload'
 import { UserDataType } from 'src/contexts/types'
 import { getAuthMe } from 'src/services/auth'
+import { getAllCities } from 'src/services/city'
+import { getAllRoles } from 'src/services/role'
 import { AppDispatch, RootState } from 'src/stores'
 import { resetInitialState } from 'src/stores/apps/auth'
 import { updateAuthMe } from 'src/stores/apps/auth/actions'
@@ -30,6 +32,8 @@ const MyProfilePage = () => {
   const [user, setUser] = useState<UserDataType | null>(null)
   const [roleId, setRoleId] = useState<string>('')
   const [avatar, setAvatar] = useState<string>('')
+  const [optionCities, setOptionCities] = useState<{ label: string; value: string }[]>([])
+  const [optionRoles, setOptionRoles] = useState<{ label: string; value: string }[]>([])
   const dispatch: AppDispatch = useDispatch()
   const { isLoading, isErrorUpdateMe, isSuccessUpdateMe, messageUpdateMe } = useSelector(
     (state: RootState) => state.auth
@@ -52,6 +56,8 @@ const MyProfilePage = () => {
     },
     resolver: yupResolver(updateSchema)
   })
+
+  //fetch
   const fetchGetAuthMe = async () => {
     setLoading(true)
     await getAuthMe()
@@ -77,6 +83,42 @@ const MyProfilePage = () => {
         setLoading(false)
       })
   }
+
+  const fetchAllCities = async () => {
+    try {
+      setLoading(true)
+      await getAllCities({ params: { limit: -1, page: -1 } }).then(res => {
+        const data = res?.data.cities
+        if (data) {
+          setOptionCities(data.map((item: { name: string; _id: string }) => ({ label: item.name, value: item._id })))
+        }
+      })
+      .catch(e => {
+        setLoading(false)
+      })
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
+  const fetchAllRoles = async () => {
+    try {
+      setLoading(true)
+      await getAllRoles({params: {limit: -1, page: -1}})
+      .then((res) => {
+        const data = res?.data.roles
+        if(data){
+          setOptionRoles(data.map((item: { name: string; _id: string }) => ({ label: item.name, value: item._id })))
+        }
+      })
+      .catch(e => {
+        setLoading(false)
+      })
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
   const onSubmit = handleSubmit(data => {
     const { firstName, lastName, middleName } = separattionFullName(data.fullName, i18n.language)
     dispatch(
@@ -98,6 +140,8 @@ const MyProfilePage = () => {
 
   useEffect(() => {
     fetchGetAuthMe()
+    fetchAllCities()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language])
 
   useEffect(() => {
@@ -110,7 +154,15 @@ const MyProfilePage = () => {
         fetchGetAuthMe()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageUpdateMe, isErrorUpdateMe, isSuccessUpdateMe])
+
+  useEffect(() => {
+    fetchGetAuthMe()
+    fetchAllCities()
+    fetchAllRoles()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -255,15 +307,15 @@ const MyProfilePage = () => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Box
                       sx={{
-                       display: 'flex',
-                       flexDirection: 'column',
-                       gap: '8px',
-                       marginTop: '14px'
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        marginTop: '14px'
                       }}
                     >
                       <InputLabel
                         sx={{
-                          fontSize: '13px',                        
+                          fontSize: '13px',
                           color: `rgba(${theme.palette.customColors.main}, 0.42)`
                         }}
                       >
@@ -271,11 +323,11 @@ const MyProfilePage = () => {
                       </InputLabel>
                       <CustomSelect
                         fullWidth
-                        // disabled
+                        disabled
                         placeholder='Enter your role...'
                         onChange={onChange}
                         value={value}
-                        options={[]}
+                        options={optionRoles}
                         onBlur={onBlur}
                         autoFocus
                         sx={{
@@ -342,35 +394,35 @@ const MyProfilePage = () => {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Box
-                    sx={{
-                     display: 'flex',
-                     flexDirection: 'column',
-                     gap: '8px',
-                     marginTop: '14px'
-                    }}
-                  >
-                    <InputLabel
                       sx={{
-                        fontSize: '13px',
-                        color: `rgba(${theme.palette.customColors.main}, 0.42)`
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        marginTop: '14px'
                       }}
                     >
-                      City *{' '}
-                    </InputLabel>
-                    <CustomSelect
-                      fullWidth
-                      // disabled
-                      placeholder='Enter your city...'
-                      onChange={onChange}
-                      value={value}
-                      options={[]}
-                      onBlur={onBlur}
-                      autoFocus
-                      sx={{
-                        borderRadius: '4px'
-                      }}
-                    />
-                  </Box>
+                      <InputLabel
+                        sx={{
+                          fontSize: '13px',
+                          color: `rgba(${theme.palette.customColors.main}, 0.42)`
+                        }}
+                      >
+                        City *{' '}
+                      </InputLabel>
+                      <CustomSelect
+                        fullWidth
+                        // disabled
+                        placeholder='Enter your city...'
+                        onChange={onChange}
+                        value={value}
+                        options={optionCities}
+                        onBlur={onBlur}
+                        autoFocus
+                        sx={{
+                          borderRadius: '4px'
+                        }}
+                      />
+                    </Box>
                   )}
                   name='city'
                 />

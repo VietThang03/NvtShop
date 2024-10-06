@@ -1,3 +1,6 @@
+import { ContentState, EditorState } from "draft-js"
+import htmlToDraft from "html-to-draftjs"
+
 export const toFullName = (lastName: string, middleName: string, firstName: string, language: string) => {
   if (language === 'vi') {
     return `${lastName ? lastName : ''} ${middleName ? middleName : ''} ${firstName ? firstName : ''}`.trim()
@@ -68,4 +71,40 @@ export const getAllValueOfObject = (obj: any, arrExlude?: string[]) => {
   } catch (error) {
     return []
   }
+}
+
+export const formatNumberToLocal = (value: string | number) => {
+  try {
+    return Number(value).toLocaleString('vi-VN', {
+      minimumFractionDigits: 0
+    })
+  } catch (error) {
+    return value
+  }
+}
+
+export const convertHTMLToDraft = (html: string) => {
+  const blocksFromHtml = htmlToDraft(html)
+  const { contentBlocks, entityMap } = blocksFromHtml
+  const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap)
+  const editorState = EditorState.createWithContent(contentState)
+
+  return editorState
+}
+
+export const stringToSlug = (str: string) => {
+  // remove accents
+  const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ',
+    to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy'
+  for (let i = 0, l = from.length; i < l; i++) {
+    str = str.replace(RegExp(from[i], 'gi'), to[i])
+  }
+
+  str = str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\-]/g, '-')
+    .replace(/-+/g, '-')
+
+  return str
 }

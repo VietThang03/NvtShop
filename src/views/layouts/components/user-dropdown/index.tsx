@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { ROUTE_CONFIG } from 'src/configs/route'
 import { toFullName } from 'src/utils'
+import { useSelector } from 'react-redux'
+import { RootState } from 'src/stores'
 
 type TProps = {}
 
@@ -53,10 +55,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }))
 
 const UserDropdown = (props: TProps) => {
-  const { user, logout } = useAuth()
+  const { user, logout, setUser } = useAuth()
   const router = useRouter()
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const { userData } = useSelector((state: RootState) => state.auth)
   const open = Boolean(anchorEl)
   const permissionsUser = user?.role.permissions ?? []
 
@@ -81,6 +84,13 @@ const UserDropdown = (props: TProps) => {
     router.push(ROUTE_CONFIG.DASHBOARD)
     handleClose()
   }
+
+  React.useEffect(() => {
+    if(userData){
+      setUser({...userData})
+    }
+  },[userData])
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>

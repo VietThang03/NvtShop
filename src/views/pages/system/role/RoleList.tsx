@@ -25,6 +25,7 @@ import { PERMISSIONS } from 'src/configs/permission'
 import { getAllValueOfObject } from 'src/utils'
 import { hexToRGBA } from 'src/utils/hex-to-rgba'
 import { usePermission } from 'src/hooks/usePermission'
+import { OBJECT_TYPE_ERROR_ROLE } from 'src/configs/error'
 
 const RoleListPage = () => {
   const columns: GridColDef[] = [
@@ -42,10 +43,10 @@ const RoleListPage = () => {
       renderCell: params => {
         const { row } = params
         return (
-          <Box>
-            {!row?.permissions?.some((per: string) => ['ADMIN.GRANTED', 'BASIC.PUBLIC']?.includes(per)) && (
+          <Box>        
               <>
                 <GridEdit
+                  disabled={!UPDATE}
                   onClick={() =>
                     setOpenCreateEdit({
                       open: true,
@@ -54,6 +55,7 @@ const RoleListPage = () => {
                   }
                 />
                 <GridDelete
+                  disabled={!DELETE}
                   onClick={() =>
                     setOpenDeleteRole({
                       open: true,
@@ -62,7 +64,6 @@ const RoleListPage = () => {
                   }
                 />
               </>
-            )}
           </Box>
         )
       }
@@ -88,7 +89,7 @@ const RoleListPage = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [disablePermission, setDisablePermission] = useState<boolean>(false)
   //permission
-  const {CREATE, DELETE, UPDATE, VIEW} = usePermission("SYSTEM.ROLE", ["CREATE", 'VIEW', 'UPDATE', 'DELETE'])
+  const { CREATE, DELETE, UPDATE, VIEW } = usePermission('SYSTEM.ROLE', ['CREATE', 'VIEW', 'UPDATE', 'DELETE'])
   const theme = useTheme()
   const { t } = useTranslation()
   const router = useRouter()
@@ -101,7 +102,8 @@ const RoleListPage = () => {
     isLoading,
     isSuccessDelete,
     isErrorDelete,
-    messageDelete
+    messageDelete,
+    typeError
   } = useSelector((state: RootState) => state.role)
 
   const handleGetListRoles = () => {
@@ -145,6 +147,7 @@ const RoleListPage = () => {
 
   useEffect(() => {
     handleGetListRoles()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, searchBy])
 
   useEffect(() => {
@@ -157,10 +160,20 @@ const RoleListPage = () => {
       handleGetListRoles()
       handleCloseCreateEdit()
       dispatch(resetInitialState())
-    } else if (isErrorCreateEdit && messageCreateEdit) {
-      toast.error(messageCreateEdit)
+    } else if (isErrorCreateEdit && messageCreateEdit && typeError) {
+      const errorConfig = OBJECT_TYPE_ERROR_ROLE[typeError]
+      if(errorConfig){
+        toast.error(messageCreateEdit)
+      }else{
+        if(openCreateEdit.id){
+          toast.error('Update role failed')
+        }else{
+          toast.error('Create role failed')
+        }
+      }    
       dispatch(resetInitialState())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessCreateEdit, isErrorCreateEdit, messageCreateEdit])
 
   useEffect(() => {
@@ -173,6 +186,7 @@ const RoleListPage = () => {
       toast.error(messageDelete)
       dispatch(resetInitialState())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessDelete, isErrorDelete, messageDelete])
 
   const handleGetDetailsRole = async (id: string) => {
@@ -245,6 +259,7 @@ const RoleListPage = () => {
                 <InputSearch value={searchBy} onChange={(value: string) => setSearchBy(value)} />
               </Box>
               <GridCreate
+                disabled={!CREATE}
                 onClick={() => {
                   setOpenCreateEdit({
                     open: true,
@@ -259,12 +274,12 @@ const RoleListPage = () => {
               }}
             >
               <CustomDataGrid
-              sx={{
-                ".row-selected": {
-                  backgroundColor: `${hexToRGBA(theme.palette.primary.main, 0.08)} !important`,
-                  color:  `${theme.palette.primary.main} !important`
-                }
-              }}
+                sx={{
+                  '.row-selected': {
+                    backgroundColor: `${hexToRGBA(theme.palette.primary.main, 0.08)} !important`,
+                    color: `${theme.palette.primary.main} !important`
+                  }
+                }}
                 rows={roles.data}
                 columns={columns}
                 pageSizeOptions={[5]}
@@ -293,7 +308,7 @@ const RoleListPage = () => {
                   //console.log(row)
                 }}
                 getRowClassName={(row: GridRowClassNameParams) => {
-                    return row.id === selectedRow.id ? "row-selected" : ""
+                  return row.id === selectedRow.id ? 'row-selected' : ''
                 }}
               />
             </Box>

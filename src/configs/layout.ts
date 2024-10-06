@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { PERMISSIONS } from './permission'
 import { ROUTE_CONFIG } from './route'
 
@@ -15,6 +16,7 @@ export type TVertical = {
 }
 
 export const VerticalItems = () => {
+  const { t } = useTranslation()
   return [
     {
       title: 'Dashboard',
@@ -41,30 +43,41 @@ export const VerticalItems = () => {
       ]
     },
     {
-      title: 'Products',
-      icon: 'material-symbols:production-quantity-limits-rounded',
+      title: 'Manage Product',
+      icon: 'eos-icons:products-outlined',
       childrens: [
         {
-          title: 'Product List',
+          title:' List Product',
           icon: 'icon-park-outline:ad-product',
-          path: ROUTE_CONFIG.PRODUCTS.MANAGER_PRODUCT,
+          path: ROUTE_CONFIG.MANAGE_PRODUCT.PRODUCT,
           permission: PERMISSIONS.MANAGE_PRODUCT.PRODUCT.VIEW
         },
         {
-          title: 'Product Portfolio',
-          icon: 'material-symbols:dual-screen',
-          path: ROUTE_CONFIG.PRODUCTS.MANAGER_TYPE_PRODUCT        
+          title: 'Type product',
+          icon: 'material-symbols-light:category-outline',
+          path: ROUTE_CONFIG.MANAGE_PRODUCT.MANAGE_TYPE_PRODUCT
         },
         {
-          title: 'Order List',
+          title: 'Comment',
+          icon: 'material-symbols-light:comment-outline',
+          path: ROUTE_CONFIG.MANAGE_PRODUCT.COMMENT
+        }
+      ]
+    },
+    {
+      title: t('Manage_order'),
+      icon: 'carbon:order-details',
+      childrens: [
+        {
+          title: t('List_order'),
           icon: 'lets-icons:order-light',
-          path: ROUTE_CONFIG.PRODUCTS.MANAGER_ORDER,
+          path: ROUTE_CONFIG.MANAGE_ORDER.ORDER,
           permission: PERMISSIONS.MANAGE_ORDER.ORDER.VIEW
         },
         {
-          title: 'Review List',
+          title: t('List_review'),
           icon: 'carbon:review',
-          path: ROUTE_CONFIG.PRODUCTS.MANAGER_REVIEW
+          path: ROUTE_CONFIG.MANAGE_ORDER.MANAGE_REVIEW
         }
       ]
     },
