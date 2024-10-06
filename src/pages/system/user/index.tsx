@@ -1,10 +1,11 @@
-import { PERMISSIONS } from "src/configs/permission"
+import { PERMISSIONS } from 'src/configs/permission'
+import UserListPage from 'src/views/pages/system/user/UserList'
 
 const UserPage = () => {
-  return(
-      <>
-      <h1>User Page</h1>
-      </>
+  return (
+    <>
+      <UserListPage />
+    </>
   )
 }
 UserPage.permissions = [PERMISSIONS.SYSTEM.USER.VIEW]

@@ -2,8 +2,31 @@
 import { Dispatch } from 'redux'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { changePasswordMe, register, updateAuthMe } from './actions'
+import { UserDataType } from 'src/contexts/types'
 
-const initialState = {
+
+type TInitialData = {
+  isLoading: boolean,
+  isSuccess: boolean,
+  isError: boolean,
+  message: string,
+  typeError: string,
+  isSuccessUpdateMe: boolean,
+  isErrorUpdateMe: boolean,
+  messageUpdateMe: string,
+  isSuccessChangePassword: boolean,
+  isErrorChangePassword: boolean,
+  messageChangePassword: string,
+  userData: UserDataType | null,
+  // isSuccessResetPassword: boolean,
+  // isErrorResetPassword: boolean,
+  // messageResetPassword: string,
+  // isSuccessForgotPassword: boolean,
+  // isErrorForgotPassword: boolean,
+  // messageForgotPassword: string,
+}
+
+const initialState: TInitialData = {
     isLoading: false,
     isSuccess: true,
     isError: false,
@@ -15,6 +38,7 @@ const initialState = {
     isSuccessChangePassword: true,
     isErrorChangePassword: false,
     messageChangePassword: '',
+    userData: null
 }
 
 export const authSlice = createSlice({
@@ -55,6 +79,7 @@ export const authSlice = createSlice({
       state.message = ''
       state.typeError = ''
     })
+
     //update me
     builder.addCase(updateAuthMe.pending, (state, action) => {
       state.isLoading = true
@@ -65,6 +90,7 @@ export const authSlice = createSlice({
       state.isErrorUpdateMe = !action.payload?.data?.email
       state.messageUpdateMe = action.payload?.message
       state.typeError = action.payload?.typeError
+      state.userData = action.payload?.data
     })
     builder.addCase(updateAuthMe.rejected, (state, action) => {
       state.isLoading = false
@@ -72,9 +98,10 @@ export const authSlice = createSlice({
       state.isErrorUpdateMe = true
       state.messageUpdateMe = ''
       state.typeError = ''
+      state.userData = null
     })
     
-    //update me
+    //change password 
     builder.addCase(changePasswordMe.pending, (state, action) => {
       state.isLoading = true
     })

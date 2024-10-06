@@ -17,7 +17,7 @@ export const usePermission = (key: string, actions: TActions[]) => {
         let result = obj
         if(keys && !!key.length){
             for(const k of keys){
-                if(k in obj){
+                if(k in result){
                     result = result[k]
                 }else{
                      return undefined
