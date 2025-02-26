@@ -1,6 +1,7 @@
 import { Box, BoxProps, FormHelperText, InputLabel, styled, useTheme } from '@mui/material'
 import { EditorProps } from 'react-draft-wysiwyg'
-import ReactDraftWysiwyg from './react-draft-wysiwyg'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import ReactDraftWysiwyg from 'src/components/custom-editor/react-draft-wysiwyg'
 
 interface TStyleWrapperEditor extends BoxProps {
   error?: boolean
