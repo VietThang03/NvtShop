@@ -317,7 +317,7 @@ const CreateEditProduct = ({ onClose, open, idProduct, optionTypes }: TProps) =>
           </Box>
           <Divider />
           <form onSubmit={onSubmit} autoComplete='off' noValidate>
-            <Box sx={{ backgroundColor: theme.palette.background.paper, borderRadius: '15px', py: 5, px: 4 }}>
+          <Box sx={{ backgroundColor: theme.palette.background.paper, borderRadius: '15px', py: 5, px: 4 }}>
               <Grid container spacing={5}>
                 <Grid container item md={6} xs={12}>
                   <Box sx={{ height: '100%', width: '100%' }}>
